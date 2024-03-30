@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Navbar from './components/navbar';
+import Navbar from '../components/navbar';
 
 
 function Home() {
@@ -11,7 +11,7 @@ function Home() {
         <p>Select an option below to start your journey!</p>
         <div className="flex gap-4 mt-4">
           <Link href="/components/student" className="bg-green-500 px-4 py-2 rounded-full hover:animate-bubble">Student Mode</Link>
-          <Link href="/components/educator" className="bg-green-500 px-4 py-2 rounded-full hover:animate-bubble">Educator Mode</Link>
+          <Link href="/Educator" className="bg-green-500 px-4 py-2 rounded-full hover:animate-bubble">Educator Mode</Link>
         </div>
       </div>
     </div>
