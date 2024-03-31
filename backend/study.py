@@ -13,6 +13,7 @@ import random
 import re
 import time
 from copy import copy as duplicate
+import os
 
 load_dotenv()
 app = Flask(__name__)
@@ -402,6 +403,7 @@ def generate_crossword():
 def main(pdf_file):
     openai.api_key = OPENAI_API_KEY
     # Take user input for notes
+    pdf_file.save(os.path.join(app.config['UPLOAD_FOLDER'], pdf_file.filename))       
     notes = extract_text(pdf_file)
     
     # Construct a prompt asking for main points and a summary
