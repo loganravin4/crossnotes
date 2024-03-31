@@ -14,9 +14,11 @@ import re
 import time
 from copy import copy as duplicate
 import os
+from flask_cors import CORS
 
 load_dotenv()
 app = Flask(__name__)
+CORS(app)
 
 # Initialize OpenAI client
 OPENAI_API_KEY = "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"
