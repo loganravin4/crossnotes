@@ -23,17 +23,15 @@ CORS(app)
 # Initialize OpenAI client
 OPENAI_API_KEY = "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"
 
-def all_words(lst):
-    number_of_words = int(input("How many words do you want?"))
+number_of_words = int(input("How many words do you want? "))
+
+def all_words(lst, number_of_words):
     random_integers = []
 
     while len(random_integers) < number_of_words:
         random_integer = random.randint(1, (number_of_words + 1))
         if random_integer not in random_integers:
             random_integers.append(random_integer)
-
-    print(random_integers)
-    print()
 
     splitted_string = lst.split('.')
     words_and_answers = []
@@ -50,6 +48,10 @@ def all_words(lst):
         if index < len(words_and_answers):
             lst.append(words_and_answers[index])
 
+    for sublist in lst:
+        for i in range(len(sublist)):
+            sublist[i] = sublist[i].replace('"', '')
+    
     return lst
 
 
@@ -407,32 +409,43 @@ def main(pdf_file):
     # Take user input for notes
     pdf_file.save(os.path.join('files', pdf_file.filename))
     notes = extract_text((os.path.join('files', pdf_file.filename)))
-    
-    # Construct a prompt asking for main points and a summary
-    prompt = f"Please generate main points and a summary based on the following study notes, format it as a keyphrase : summary, each keyphrase and summary pair is seperated by a period, pretend you are a crossword maker and you are creating answers to the crossword and their corresponding clues:\n{notes}"
 
-    # Call the OpenAI API to generate main points and a summary
-    response = openai.Completion.create(
-        engine="gpt-3.5-turbo-instruct",  # You can use other engines like "curie" if needed
-        prompt=prompt,
-        max_tokens=800,  # Adjust as needed
-        temperature=0.5,  # Adjust as needed
-        top_p=1.0,
-        frequency_penalty=0.0,
-        presence_penalty=0.0,
+    while True:
+        # Construct a prompt asking for main points and a summary
+        prompt = f"Please generate main points and a summary based on the following study notes, format it as a keyphrase : summary, each keyphrase and summary pair is seperated by a period, pretend you are a crossword maker and you are creating answers to the crossword and their corresponding clues:\n{notes}"
 
-        )
+        # Call the OpenAI API to generate main points and a summary
+        response = openai.Completion.create(
+            engine="gpt-3.5-turbo-instruct",  # You can use other engines like "curie" if needed
+            prompt=prompt,
+            max_tokens=800,  # Adjust as needed
+            temperature=0.5,  # Adjust as needed
+            top_p=1.0,
+            frequency_penalty=0.0,
+            presence_penalty=0.0,
+
+            )
+        
+        # Print the generated main points and summary
+        defs = response.choices[0].text.strip()
+        
+        #print(defs)
     
-    # Print the generated main points and summary
-    defs = response.choices[0].text.strip()
-    
-    #print(defs)
-    
-    word_list = all_words(defs)
+        word_list = all_words(defs, number_of_words)
+
+        if(len(word_list) != number_of_words):
+            continue
+        else:
+            break
     
     #start_full = float(time.time())
 
-    length= int(input("How many rows and columns do you prefer? "))
+    if number_of_words <= 5:
+        length = 20
+    if 5 < number_of_words <= 10:
+        length = 30
+    if 10 < number_of_words <= 15:
+        length = 40
     a = Crossword(length, length, '-', 5000, word_list)
     a.compute_crossword(2)
     print(a.word_bank())
