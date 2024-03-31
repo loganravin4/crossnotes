@@ -403,8 +403,8 @@ def generate_crossword():
 def main(pdf_file):
     openai.api_key = OPENAI_API_KEY
     # Take user input for notes
-    pdf_file.save(os.path.join(app.config['UPLOAD_FOLDER'], pdf_file.filename))       
-    notes = extract_text(pdf_file)
+    pdf_file.save(os.path.join('files', pdf_file.filename))
+    notes = extract_text((os.path.join('files', pdf_file.filename)))
     
     # Construct a prompt asking for main points and a summary
     prompt = f"Please generate main points and a summary based on the following study notes, format it as a keyphrase : summary, each keyphrase and summary pair is seperated by a period, pretend you are a crossword maker and you are creating answers to the crossword and their corresponding clues:\n{notes}"
