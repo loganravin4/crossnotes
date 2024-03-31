@@ -23,7 +23,7 @@ CORS(app)
 # Initialize OpenAI client
 OPENAI_API_KEY = "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"
 
-number_of_words = int(input("How many words do you want? "))
+number_of_words = int(input("How many words do you want? ")) + 1
 
 def all_words(lst, number_of_words):
     random_integers = []
@@ -90,7 +90,7 @@ class Crossword(object):
         # sort by length
         temp_list.sort(key=lambda i: len(i.word), reverse=True)
         self.available_words = temp_list
- 
+
     def compute_crossword(self, time_permitted=1.00, spins=2):
         copy = Crossword(self.cols, self.rows, self.empty,
                          self.maxloops, self.available_words)
