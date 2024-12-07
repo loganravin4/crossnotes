@@ -21,7 +21,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize OpenAI client
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "key"
 
 number_of_words = int(input("How many words do you want? ")) + 1
 
